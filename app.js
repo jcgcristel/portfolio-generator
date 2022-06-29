@@ -1,17 +1,18 @@
-var profileDataArgs = process.argv.slice(2, process.argv.length);
+// Node API
+const fs = require('fs');
 
-const printProfileData = profileDataArr => {
-    // regular for loop
-    for (let i = 0; i < profileDataArr.length; i += 1) {
-        console.log(profileDataArr[i]);
-    }
+// Imports
+const generatePage = require('./src/page-template.js')
 
-    console.log('-----------------')
+const profileDataArgs = process.argv.slice(2, process.argv.length);
 
-    // using for each loop
-    profileDataArr.forEach((profileItem) => { console.log(profileItem) });
-};
+const name = profileDataArgs[0]
+const github = profileDataArgs[1]
 
+fs.writeFile('./index.html', generatePage(name, github), e => {
+    if (e) throw e;
 
-printProfileData(profileDataArgs);
+    console.log('Portfolio complete! Checkout index.html to see the output!');
+});
 
+module.exports = generatePage;
