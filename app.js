@@ -1,7 +1,7 @@
 // Node API
-// const inquirer = require('inquirer');
-
 import inquirer from 'inquirer';
+import fs from 'fs';
+import {generatePage} from './src/page-template.js';
 
 // const fs = require('fs');
 // const generatePage = require('./src/page-template.js');
@@ -112,5 +112,11 @@ const promptUser = () => {
 promptUser()
     .then(promptProject)
     .then(portfolioData => {
-        console.log(portfolioData);
+        const pageHTML = generatePage(portfolioData);
+
+        fs.writeFile('./index.html', pageHTML, e => {
+            if (e) throw new Error(e);
+
+            console.log('Page created! Check out index.html in this directory to see it!');
+        });
     });
