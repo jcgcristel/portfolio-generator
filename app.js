@@ -2,6 +2,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs';
 import {generatePage} from './src/page-template.js';
+import { copyFile, writeFile } from './utils/generate-site.js';
 
 // const fs = require('fs');
 // const generatePage = require('./src/page-template.js');
@@ -112,11 +113,36 @@ const promptUser = () => {
 promptUser()
     .then(promptProject)
     .then(portfolioData => {
-        const pageHTML = generatePage(portfolioData);
-
-        fs.writeFile('./index.html', pageHTML, e => {
-            if (e) throw new Error(e);
-
-            console.log('Page created! Check out index.html in this directory to see it!');
-        });
+        return generatePage(portfolioData);
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
+    })
+    .catch(e => {
+        console.log(e);
     });
+
+        // const pageHTML = generatePage(portfolioData);
+
+        // fs.writeFile('./dist/index.html', pageHTML, e => {
+        //     if (e) throw new Error(e);
+
+        //     console.log('Page created! Check out index.html in this directory to see it!');
+        // });
+
+        // fs.copyFile('./src/style.css', './dist/style.css', e => {
+        //     if (e) {
+        //         console.log(e);
+        //         return;
+        //     }
+
+        //     console.log('Style sheet copied successfully!');
+        // })
+    // });
